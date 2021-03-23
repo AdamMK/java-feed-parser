@@ -2,16 +2,19 @@ package com.feed;
 
 
 import com.google.gson.Gson;
+import org.springframework.stereotype.Component;
+
 import java.util.Arrays;
 import java.util.List;
 
+@Component
 public class Parser {
 
     int msgId;
     String operation;
     String type;
     Long timestamp;
-    Parser(){}
+
 
     public String splitter(String line){
         Parser header = new Parser();
