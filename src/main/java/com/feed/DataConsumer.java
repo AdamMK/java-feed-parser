@@ -14,7 +14,7 @@ import java.net.Socket;
 @Component
 public class DataConsumer implements ApplicationListener<ApplicationReadyEvent> {
     @Autowired
-    Parser pars;
+    HierarchyDataParser parser;
 
     @Override
     public void onApplicationEvent(ApplicationReadyEvent event) {
@@ -35,7 +35,7 @@ public class DataConsumer implements ApplicationListener<ApplicationReadyEvent> 
         while ((line = reader.readLine()) != null) {
             content.append(line);
             content.append(System.lineSeparator());
-            pars.splitter(line);
+            parser.parse(line);
             System.out.println(line);
         }
 
