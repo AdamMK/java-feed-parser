@@ -24,13 +24,13 @@ public class DataConsumer implements ApplicationListener<ApplicationReadyEvent> 
         try {
             Socket socket = SocketFactory.getDefault().createSocket("localhost", 8282);
             BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-                readAllLines(in);
+                consume(in);
             } catch (IOException e) {
                 e.printStackTrace();
             }
     }
 
-    public String readAllLines(BufferedReader reader) throws IOException {
+    public String consume(BufferedReader reader) throws IOException {
         StringBuilder content = new StringBuilder();
         String line;
 
@@ -40,9 +40,9 @@ public class DataConsumer implements ApplicationListener<ApplicationReadyEvent> 
 //            parser.parse(line);
             List<String> arrayLine = Arrays.asList(line.split("\\|"));
             String datatype = arrayLine.get(3);
-            if(datatype.equals("event")) {
-                System.out.println(parser.parse(line));
-            }
+
+                System.out.println(line);
+
         }
 
         return content.toString();
