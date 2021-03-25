@@ -10,6 +10,8 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.Socket;
+import java.util.Arrays;
+import java.util.List;
 
 @Component
 public class DataConsumer implements ApplicationListener<ApplicationReadyEvent> {
@@ -35,8 +37,12 @@ public class DataConsumer implements ApplicationListener<ApplicationReadyEvent> 
         while ((line = reader.readLine()) != null) {
             content.append(line);
             content.append(System.lineSeparator());
-            parser.parse(line);
-            System.out.println(line);
+//            parser.parse(line);
+            List<String> arrayLine = Arrays.asList(line.split("\\|"));
+            String datatype = arrayLine.get(3);
+            if(datatype.equals("event")) {
+                System.out.println(parser.parse(line));
+            }
         }
 
         return content.toString();
