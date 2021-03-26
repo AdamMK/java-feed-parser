@@ -21,9 +21,8 @@ public class DataConsumer implements ApplicationListener<ApplicationReadyEvent> 
     @Override
     public void onApplicationEvent(ApplicationReadyEvent event) {
 
-        try {
-            Socket socket = SocketFactory.getDefault().createSocket("localhost", 8282);
-            BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+        try (BufferedReader in = new BufferedReader(
+            new InputStreamReader(SocketFactory.getDefault().createSocket("localhost", 8282).getInputStream()))){
                 consume(in);
             } catch (IOException e) {
                 e.printStackTrace();
