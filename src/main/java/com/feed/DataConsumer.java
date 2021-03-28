@@ -37,10 +37,8 @@ public class DataConsumer implements ApplicationListener<ApplicationReadyEvent> 
             content.append(line);
             content.append(System.lineSeparator());
 //            parser.parse(line);
-            List<String> arrayLine = Arrays.asList(line.split("\\|"));
-            String datatype = arrayLine.get(3);
 
-                System.out.println(line);
+            System.out.println(line);
 
         }
 

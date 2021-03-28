@@ -1,10 +1,11 @@
 package com.feed;
 
 
+import com.feed.Exception.IncompatibleDatatypeException;
+import com.feed.Exception.ParsingFailedException;
 import org.springframework.stereotype.Component;
 
 import java.time.Instant;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -12,7 +13,7 @@ import java.util.List;
 public class HierarchyDataParser {
 
 
-    public Object parse(String line)  {
+    public HierarchyData parse(String line) throws IncompatibleDatatypeException {
 
         List<String> arrayLine = Arrays.asList(line.split("\\|"));
         String datatype = arrayLine.get(3);
@@ -29,13 +30,14 @@ public class HierarchyDataParser {
                     return parseEvent(arrayLine);
             }
         } catch (Exception e){
-            System.out.println("Message parsing exception");}
+            throw new IncompatibleDatatypeException("Incompatible datatype exception " + e);
+            }
 
         return null;
     }
 
 
-    public Event parseEvent(List<String> ar){
+    private Event parseEvent(List<String> ar) throws ParsingFailedException {
         int eIdx = 1;
         int msgId = Integer.parseInt(ar.get(eIdx++));
         String operation = ar.get(eIdx+=2);
@@ -43,19 +45,24 @@ public class HierarchyDataParser {
         String eventId = ar.get(eIdx++);
         String category = ar.get(eIdx++);
         String subCategory = ar.get(eIdx++);
-        String name = ar.get(eIdx++) + ar.get(eIdx++) + ar.get(eIdx++) + ar.get(eIdx+=2);
+        String name = (ar.get(eIdx++) + ar.get(eIdx++) + ar.get(eIdx++) + ar.get(eIdx++) + ar.get(eIdx++)).replace("\\","");
         Instant startTime = Instant.ofEpochSecond(Long.parseLong(ar.get(eIdx++)));
         boolean displayed = "1".equals(ar.get(eIdx++));
         boolean suspended = "1".equals(ar.get(eIdx));
 
-        Event event = new Event(msgId, operation, timestamp, eventId, category, subCategory, name, startTime, displayed, suspended );
-        return event;
+        try{
+            Event event = new Event(msgId, operation, timestamp, eventId, category, subCategory, name, startTime, displayed, suspended );
+            return event;
+        } catch (Exception e){
+            throw new ParsingFailedException("Message could not be parsed " + e);
+        }
+
     }
 
-    public Market parseMarket(List<String> ar){
+    private Market parseMarket(List<String> ar){
         int mIdx = 1;
         int msgId = Integer.parseInt(ar.get(mIdx++));
-        String operation = ar.get(mIdx++);
+        String operation = ar.get(mIdx+=2);
         Instant timestamp = Instant.ofEpochSecond(Long.parseLong(ar.get(mIdx++)));
         String eventId = ar.get(mIdx++);
         String marketId = ar.get(mIdx++);
@@ -67,7 +74,7 @@ public class HierarchyDataParser {
         return market;
     }
 
-    public Outcome parseOutcome(List<String> ar){
+    private Outcome parseOutcome(List<String> ar){
         int oIdx = 1;
         int msgId = Integer.parseInt(ar.get(oIdx++));
         String operation = ar.get(oIdx+=2);

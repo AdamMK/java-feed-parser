@@ -3,6 +3,7 @@ package com.feed;
 
 
 import java.time.Instant;
+import java.util.Objects;
 
 
 public class Outcome extends HierarchyData{
@@ -80,5 +81,30 @@ public class Outcome extends HierarchyData{
 
     public void setSuspended(boolean suspended) {
         this.suspended = suspended;
+    }
+
+    @Override
+    public String toString() {
+        return "Outcome{" +
+                "marketId='" + marketId + '\'' +
+                ", outcomeId='" + outcomeId + '\'' +
+                ", name='" + name + '\'' +
+                ", price='" + price + '\'' +
+                ", displayed=" + displayed +
+                ", suspended=" + suspended +
+                '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Outcome outcome = (Outcome) o;
+        return displayed == outcome.displayed && suspended == outcome.suspended && Objects.equals(marketId, outcome.marketId) && Objects.equals(outcomeId, outcome.outcomeId) && Objects.equals(name, outcome.name) && Objects.equals(price, outcome.price);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(marketId, outcomeId, name, price, displayed, suspended);
     }
 }

@@ -1,9 +1,7 @@
 package com.feed;
 
-
-
 import java.time.Instant;
-
+import java.util.Objects;
 
 public class Event extends HierarchyData{
 
@@ -91,5 +89,31 @@ public class Event extends HierarchyData{
 
     public void setSuspended(boolean suspended) {
         this.suspended = suspended;
+    }
+
+    @Override
+    public String toString() {
+        return "Event{" +
+                "eventId='" + eventId + '\'' +
+                ", category='" + category + '\'' +
+                ", subCategory='" + subCategory + '\'' +
+                ", name='" + name + '\'' +
+                ", startTime=" + startTime +
+                ", displayed=" + displayed +
+                ", suspended=" + suspended +
+                '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Event event = (Event) o;
+        return displayed == event.displayed && suspended == event.suspended && Objects.equals(eventId, event.eventId) && Objects.equals(category, event.category) && Objects.equals(subCategory, event.subCategory) && Objects.equals(name, event.name) && Objects.equals(startTime, event.startTime);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(eventId, category, subCategory, name, startTime, displayed, suspended);
     }
 }
