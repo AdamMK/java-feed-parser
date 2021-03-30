@@ -1,5 +1,6 @@
 package com.feed;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.ApplicationListener;
@@ -17,6 +18,9 @@ import java.util.List;
 public class DataConsumer implements ApplicationListener<ApplicationReadyEvent> {
     @Autowired
     HierarchyDataParser parser;
+
+    @Autowired
+    ObjectMapper jsonObjectMapper;
 
     @Override
     public void onApplicationEvent(ApplicationReadyEvent event) {
@@ -39,6 +43,8 @@ public class DataConsumer implements ApplicationListener<ApplicationReadyEvent> 
 //            parser.parse(line);
 
             System.out.println(line);
+//            HierarchyData parsedValue = parser.parse(line);
+//            jsonObjectMapper.writeValueAsString(parsedValue);
 
         }
 
