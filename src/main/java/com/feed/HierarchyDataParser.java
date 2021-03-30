@@ -1,14 +1,12 @@
 package com.feed;
 
-
 import com.feed.Exception.IncompatibleDatatypeException;
 import com.feed.Exception.ParsingFailedException;
 import org.springframework.stereotype.Component;
-
 import java.time.Instant;
 import java.util.Arrays;
 import java.util.List;
-import java.util.function.Function;
+
 
 @Component
 public class HierarchyDataParser {
@@ -38,58 +36,65 @@ public class HierarchyDataParser {
 
     private Event parseEvent(List<String> ar) throws ParsingFailedException {
         try {
-            int eIdx = 1;
-            int msgId = Integer.parseInt(ar.get(eIdx++));
-            String operation = ar.get(eIdx += 2);
-            Instant timestamp = Instant.ofEpochSecond(Long.parseLong(ar.get(eIdx++)));
-            String eventId = ar.get(eIdx++);
-            String category = ar.get(eIdx++);
-            String subCategory = ar.get(eIdx++);
+            int msgId = Integer.parseInt(ar.get(1));
+            String operation = ar.get(2);
+            Instant timestamp = Instant.ofEpochSecond(Long.parseLong(ar.get(4)));
+            String eventId = ar.get(5);
+            String category = ar.get(6);
+            String subCategory = ar.get(7);
             String name =
-                (ar.get(eIdx++) + ar.get(eIdx++) + ar.get(eIdx++) + ar.get(eIdx++) + ar.get(eIdx++)).replace("\\", "");
-            Instant startTime = Instant.ofEpochSecond(Long.parseLong(ar.get(eIdx++)));
-            boolean displayed = "1".equals(ar.get(eIdx++));
-            boolean suspended = "1".equals(ar.get(eIdx));
+                (ar.get(8) + ar.get(9) + ar.get(10) + ar.get(11) + ar.get(12)).replace("\\", "");
+            Instant startTime = Instant.ofEpochSecond(Long.parseLong(ar.get(13)));
+            boolean displayed = "1".equals(ar.get(14));
+            boolean suspended = "1".equals(ar.get(15));
 
-            Event event = new Event(msgId, operation, timestamp, eventId, category, subCategory, name, startTime, displayed, suspended );
-            return event;
-        } catch (Exception e){
+            return new Event(
+                msgId,
+                operation,
+                timestamp,
+                eventId,
+                category,
+                subCategory,
+                name,
+                startTime,
+                displayed,
+                suspended
+            );
+        } catch (Exception e) {
             throw new ParsingFailedException("Message could not be parsed " + e);
         }
     }
 
     private Market parseMarket(List<String> ar) throws ParsingFailedException {
         try {
-            int mIdx = 1;
-            int msgId = Integer.parseInt(ar.get(mIdx++));
-            String operation = ar.get(mIdx += 2);
-            Instant timestamp = Instant.ofEpochSecond(Long.parseLong(ar.get(mIdx++)));
-            String eventId = ar.get(mIdx++);
-            String marketId = ar.get(mIdx++);
-            String name = ar.get(mIdx++);
-            boolean displayed = "1".equals(ar.get(mIdx++));
-            boolean suspended = "1".equals(ar.get(mIdx));
+            int msgId = Integer.parseInt(ar.get(1));
+            String operation = ar.get(2);
+            Instant timestamp = Instant.ofEpochSecond(Long.parseLong(ar.get(4)));
+            String eventId = ar.get(5);
+            String marketId = ar.get(6);
+            String name = ar.get(7);
+            boolean displayed = "1".equals(ar.get(8));
+            boolean suspended = "1".equals(ar.get(9));
 
             Market market = new Market(msgId, operation, timestamp, eventId, marketId, name, displayed, suspended);
             return market;
         } catch (Exception e) {
             throw new ParsingFailedException("Market could not be parsed");
         }
-
     }
 
     private Outcome parseOutcome(List<String> ar) throws ParsingFailedException {
+
         try {
-            int oIdx = 1;
-            int msgId = Integer.parseInt(ar.get(oIdx++));
-            String operation = ar.get(oIdx += 2);
-            Instant timestamp = Instant.ofEpochSecond(Long.parseLong(ar.get(oIdx++)));
-            String marketId = ar.get(oIdx++);
-            String outcomeId = ar.get(oIdx++);
-            String name = ar.get(oIdx++);
-            String price = ar.get(oIdx++);
-            boolean displayed = "1".equals(ar.get(oIdx++));
-            boolean suspended = "1".equals(ar.get(oIdx));
+            int msgId = Integer.parseInt(ar.get(1));
+            String operation = ar.get(2);
+            Instant timestamp = Instant.ofEpochSecond(Long.parseLong(ar.get(4)));
+            String marketId = ar.get(5);
+            String outcomeId = ar.get(6);
+            String name = ar.get(7);
+            String price = ar.get(8);
+            boolean displayed = "1".equals(ar.get(9));
+            boolean suspended = "1".equals(ar.get(10));
 
             Outcome outcome =
                 new Outcome(msgId, operation, timestamp, marketId, outcomeId, name, price, displayed, suspended);

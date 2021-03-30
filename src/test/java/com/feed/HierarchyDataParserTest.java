@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Test;
 import java.time.Instant;
 import static org.junit.jupiter.api.Assertions.*;
 
-class ParserTest {
+class HierarchyDataParserTest {
 
     HierarchyDataParser dataParser = new HierarchyDataParser();
 
@@ -61,19 +61,19 @@ class ParserTest {
 
     @Test
     void failedToParseEvent() throws IncompatibleDatatypeException {
-        String exampleMsg = "|1f|Football|event|\\|Watford\\\\| vs \\\\|Southampton\\\\||1616768199536|0|1|\"";
+        String exampleMsg = "|1f|Football|event|\\|9536|0|1|\"";
         assertThrows(ParsingFailedException.class,() -> dataParser.parse(exampleMsg));
     }
 
     @Test
     void failedToParseMarket() throws IncompatibleDatatypeException {
-        String exampleMsg = "|1f|Football|market|\\|Watford\\\\| vs \\\\|Southampton\\\\||1616768199536|0|1|\"";
+        String exampleMsg = "|1f|Football|market|\\|Watford\\\\| vs \\\\|Southa6|0|1|\"";
         assertThrows(ParsingFailedException.class,() -> dataParser.parse(exampleMsg));
     }
 
     @Test
     void failedToParseOutcome() throws IncompatibleDatatypeException {
-        String exampleMsg = "|1f|Football|outcome|\\|Watford\\\\| vs \\\\|Southampton\\\\||1616768199536|0|1|\"";
+        String exampleMsg = "|1f|Football|outcome|\\|Wa\\|Southampton\\\\||1616768199536|0|1|";
         assertThrows(ParsingFailedException.class,() -> dataParser.parse(exampleMsg));
     }
 

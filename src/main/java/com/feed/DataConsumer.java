@@ -10,12 +10,12 @@ import javax.net.SocketFactory;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.net.Socket;
-import java.util.Arrays;
-import java.util.List;
+import java.util.logging.Logger;
+
 
 @Component
 public class DataConsumer implements ApplicationListener<ApplicationReadyEvent> {
+
     @Autowired
     HierarchyDataParser parser;
 
@@ -33,6 +33,8 @@ public class DataConsumer implements ApplicationListener<ApplicationReadyEvent> 
             }
     }
 
+    private static final Logger LOGGER = Logger.getLogger(DataConsumer.class.getName());
+
     public String consume(BufferedReader reader) throws IOException {
         StringBuilder content = new StringBuilder();
         String line;
@@ -40,11 +42,18 @@ public class DataConsumer implements ApplicationListener<ApplicationReadyEvent> 
         while ((line = reader.readLine()) != null) {
             content.append(line);
             content.append(System.lineSeparator());
-//            parser.parse(line);
 
             System.out.println(line);
-//            HierarchyData parsedValue = parser.parse(line);
-//            jsonObjectMapper.writeValueAsString(parsedValue);
+
+            //assumption on how app would behave on partial data corruption
+            try {
+                HierarchyData parsedValue = parser.parse(line);
+                jsonObjectMapper.writeValueAsString(parsedValue);
+            } catch (Exception e) {
+                LOGGER.info("Message could not be parsed");
+            }
+
+
 
         }
 
