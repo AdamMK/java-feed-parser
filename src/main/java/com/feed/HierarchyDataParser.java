@@ -1,8 +1,7 @@
 package com.feed;
 
-import com.feed.Exception.IncompatibleDatatypeException;
-import com.feed.Exception.ParsingFailedException;
 import org.springframework.stereotype.Component;
+
 import java.time.Instant;
 import java.util.Arrays;
 import java.util.List;
@@ -91,10 +90,10 @@ public class HierarchyDataParser {
             Instant timestamp = Instant.ofEpochSecond(Long.parseLong(ar.get(4)));
             String marketId = ar.get(5);
             String outcomeId = ar.get(6);
-            String name = ar.get(7);
-            String price = ar.get(8);
-            boolean displayed = "1".equals(ar.get(9));
-            boolean suspended = "1".equals(ar.get(10));
+            String name = ar.get(7).equals("\\") ? (ar.get(7) + ar.get(8) + ar.get(9)).replace("\\", "") : (ar.get(7));
+            String price = ar.get(7).equals("\\") ? ar.get(10) : ar.get(8);
+            boolean displayed = ar.get(7).equals("\\") ? "1".equals(ar.get(11)) : "1".equals(ar.get(9));
+            boolean suspended = ar.get(7).equals("\\") ? "1".equals(ar.get(12)) : "1".equals(ar.get(10));
 
             Outcome outcome =
                 new Outcome(msgId, operation, timestamp, marketId, outcomeId, name, price, displayed, suspended);

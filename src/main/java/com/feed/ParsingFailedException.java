@@ -1,4 +1,4 @@
-package com.feed.Exception;
+package com.feed;
 
 public class ParsingFailedException extends Exception{
 

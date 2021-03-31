@@ -1,7 +1,5 @@
 package com.feed;
 
-import com.feed.Exception.IncompatibleDatatypeException;
-import com.feed.Exception.ParsingFailedException;
 import org.junit.jupiter.api.Test;
 import java.time.Instant;
 import static org.junit.jupiter.api.Assertions.*;
@@ -43,7 +41,7 @@ class HierarchyDataParserTest {
     }
 
     @Test
-    void parseOutcome() throws IncompatibleDatatypeException, ParsingFailedException {
+    void parseOutcomeDraw() throws IncompatibleDatatypeException, ParsingFailedException {
 
         String exampleLine = "|832|update|outcome|1616449515071|e9e4aa24-0026-413f-a91e-69b7962a91a6|57926669-c442-461f-9b7d-f74a1c8e3375|Draw|1/1|1|0|";
         assertEquals(new Outcome(
@@ -60,21 +58,44 @@ class HierarchyDataParserTest {
     }
 
     @Test
-    void failedToParseEvent() throws IncompatibleDatatypeException {
+    void parseOutcomeWin() throws IncompatibleDatatypeException, ParsingFailedException {
+
+        String exampleLine = "|832|update|outcome|1616449515071|e9e4aa24-0026-413f-a91e-69b7962a91a6|57926669-c442-461f-9b7d-f74a1c8e3375|\\|Winner\\||1/1|1|0|";
+        assertEquals(new Outcome(
+            832,
+            "update",
+            Instant.ofEpochSecond(1616449515071L),
+            "e9e4aa24-0026-413f-a91e-69b7962a91a6",
+            "57926669-c442-461f-9b7d-f74a1c8e3375",
+            "Winner",
+            "1/1",
+            true,
+            false
+        ), dataParser.parse(exampleLine));
+    }
+
+    @Test
+    void failedToParseEvent() {
         String exampleMsg = "|1f|Football|event|\\|9536|0|1|\"";
         assertThrows(ParsingFailedException.class,() -> dataParser.parse(exampleMsg));
     }
 
     @Test
-    void failedToParseMarket() throws IncompatibleDatatypeException {
+    void failedToParseMarket() {
         String exampleMsg = "|1f|Football|market|\\|Watford\\\\| vs \\\\|Southa6|0|1|\"";
         assertThrows(ParsingFailedException.class,() -> dataParser.parse(exampleMsg));
     }
 
     @Test
-    void failedToParseOutcome() throws IncompatibleDatatypeException {
+    void failedToParseOutcome() {
         String exampleMsg = "|1f|Football|outcome|\\|Wa\\|Southampton\\\\||1616768199536|0|1|";
         assertThrows(ParsingFailedException.class,() -> dataParser.parse(exampleMsg));
+    }
+
+    @Test
+    void failedToRecogniseMessageDataType() throws IncompatibleDatatypeException, ParsingFailedException{
+        String exampleMsg = "|832|update|unrecognised_type|";
+        assertThrows(IncompatibleDatatypeException.class, () -> dataParser.parse(exampleMsg));
     }
 
 }

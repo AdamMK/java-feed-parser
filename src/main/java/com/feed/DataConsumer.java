@@ -43,17 +43,15 @@ public class DataConsumer implements ApplicationListener<ApplicationReadyEvent> 
             content.append(line);
             content.append(System.lineSeparator());
 
-            System.out.println(line);
+            //System.out.println(line);
 
             //assumption on how app would behave on partial data corruption
             try {
                 HierarchyData parsedValue = parser.parse(line);
-                jsonObjectMapper.writeValueAsString(parsedValue);
+                System.out.println(jsonObjectMapper.writeValueAsString(parsedValue));
             } catch (Exception e) {
                 LOGGER.info("Message could not be parsed");
             }
-
-
 
         }
 
