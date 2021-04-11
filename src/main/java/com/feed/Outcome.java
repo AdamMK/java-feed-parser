@@ -2,13 +2,17 @@ package com.feed;
 
 
 
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
+
 import java.time.Instant;
 import java.util.Objects;
 
-
+@Document(collection = "outcome")
 public class Outcome extends HierarchyData{
 
     private String marketId;
+    @Id
     private String outcomeId;
     private String name;
     private String price;

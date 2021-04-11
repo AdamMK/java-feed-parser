@@ -1,6 +1,9 @@
 package com.feed;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.feed.repository.EventDataRepository;
+import com.feed.repository.MarketDataRepository;
+import com.feed.repository.OutcomeDataRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.ApplicationListener;
@@ -21,6 +24,15 @@ public class DataConsumer implements ApplicationListener<ApplicationReadyEvent> 
 
     @Autowired
     ObjectMapper jsonObjectMapper;
+
+    @Autowired
+    EventDataRepository eventDataRepository;
+
+    @Autowired
+    MarketDataRepository marketDataRepository;
+
+    @Autowired
+    OutcomeDataRepository outcomeDataRepository;
 
     @Override
     public void onApplicationEvent(ApplicationReadyEvent event) {
@@ -48,7 +60,13 @@ public class DataConsumer implements ApplicationListener<ApplicationReadyEvent> 
             //assumption on how app would behave on partial data corruption
             try {
                 HierarchyData parsedValue = parser.parse(line);
-                System.out.println(jsonObjectMapper.writeValueAsString(parsedValue));
+                if (parsedValue instanceof Event)
+                    eventDataRepository.save((Event) parsedValue);
+                else if (parsedValue instanceof Market)
+                    marketDataRepository.save((Market) parsedValue);
+                else if (parsedValue instanceof Outcome)
+                    outcomeDataRepository.save((Outcome) parsedValue);
+                //System.out.println(jsonObjectMapper.writeValueAsString(parsedValue));
             } catch (Exception e) {
                 LOGGER.info("Message could not be parsed");
             }

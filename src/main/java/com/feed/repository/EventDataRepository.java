@@ -1,8 +1,8 @@
 package com.feed.repository;
 
-public class EventDataRepository {
+import com.feed.Event;
+import org.springframework.data.mongodb.repository.MongoRepository;
+import org.springframework.stereotype.Repository;
 
-    public String saveEvent(){
-        return "Event saved";
-    }
-}
+@Repository
+public interface EventDataRepository extends MongoRepository<Event, String> { }

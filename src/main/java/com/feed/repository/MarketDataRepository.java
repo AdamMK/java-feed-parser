@@ -1,7 +1,8 @@
 package com.feed.repository;
 
-public class MarketDataRepository {
-    public String saveMarket() {
-        return "Market saved";
-    }
+import com.feed.Market;
+import org.springframework.data.mongodb.repository.MongoRepository;
+
+public interface MarketDataRepository extends MongoRepository<Market, String> {
+
 }

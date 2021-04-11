@@ -1,8 +1,7 @@
 package com.feed.repository;
 
-public class OutcomeDataRepository {
+import com.feed.Outcome;
+import org.springframework.data.mongodb.repository.MongoRepository;
 
-    public String saveOutcome() {
-        return "Outcome saved";
-    }
+public interface OutcomeDataRepository extends MongoRepository<Outcome, String> {
 }

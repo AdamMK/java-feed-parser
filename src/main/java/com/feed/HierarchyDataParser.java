@@ -75,8 +75,7 @@ public class HierarchyDataParser {
             boolean displayed = "1".equals(ar.get(8));
             boolean suspended = "1".equals(ar.get(9));
 
-            Market market = new Market(msgId, operation, timestamp, eventId, marketId, name, displayed, suspended);
-            return market;
+            return new Market(msgId, operation, timestamp, eventId, marketId, name, displayed, suspended);
         } catch (Exception e) {
             throw new ParsingFailedException("Market could not be parsed");
         }
@@ -95,9 +94,7 @@ public class HierarchyDataParser {
             boolean displayed = ar.get(7).equals("\\") ? "1".equals(ar.get(11)) : "1".equals(ar.get(9));
             boolean suspended = ar.get(7).equals("\\") ? "1".equals(ar.get(12)) : "1".equals(ar.get(10));
 
-            Outcome outcome =
-                new Outcome(msgId, operation, timestamp, marketId, outcomeId, name, price, displayed, suspended);
-            return outcome;
+            return new Outcome(msgId, operation, timestamp, marketId, outcomeId, name, price, displayed, suspended);
         } catch (Exception e) {
             throw new ParsingFailedException("Outcome could not be parsed");
         }

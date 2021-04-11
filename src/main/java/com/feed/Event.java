@@ -1,10 +1,15 @@
 package com.feed;
 
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
+
 import java.time.Instant;
 import java.util.Objects;
 
+@Document(collection = "event")
 public class Event extends HierarchyData{
 
+    @Id
     private String eventId;
     private String category;
     private String subCategory;
