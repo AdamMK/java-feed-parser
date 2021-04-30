@@ -39,7 +39,8 @@ class HierarchyDataParserTest {
                 "bc8b98c5-dcfe-4ad4-bba6-9a3a687df9ca",
                 "2nd Set Winner",
                 false,
-                true
+                true,
+                List.of()
         ), dataParser.parse(exampleLine));
     }
 

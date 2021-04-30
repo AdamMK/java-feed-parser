@@ -4,6 +4,7 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.time.Instant;
+import java.util.List;
 import java.util.Objects;
 
 @Document(collection = "market")
@@ -15,6 +16,19 @@ public class Market extends HierarchyData{
     private String name;
     private boolean displayed;
     private boolean suspended;
+    List<Outcome> outcomes;
+
+    @Override
+    public String toString() {
+        return "Market{" +
+            "eventId='" + eventId + '\'' +
+            ", marketId='" + marketId + '\'' +
+            ", name='" + name + '\'' +
+            ", displayed=" + displayed +
+            ", suspended=" + suspended +
+            ", outcomes=" + outcomes +
+            '}';
+    }
 
     public Market(
         int msgId,
@@ -24,7 +38,8 @@ public class Market extends HierarchyData{
         String marketId,
         String name,
         boolean displayed,
-        boolean suspended
+        boolean suspended,
+        List<Outcome> outcomes
     ) {
         super(msgId, operation, timestamp);
         this.eventId = eventId;
@@ -32,6 +47,7 @@ public class Market extends HierarchyData{
         this.name = name;
         this.displayed = displayed;
         this.suspended = suspended;
+        this.outcomes = outcomes;
     }
 
     public String getEventId() {
@@ -75,26 +91,17 @@ public class Market extends HierarchyData{
     }
 
     @Override
-    public String toString() {
-        return "Market{" +
-                "eventId='" + eventId + '\'' +
-                ", marketId='" + marketId + '\'' +
-                ", name='" + name + '\'' +
-                ", displayed=" + displayed +
-                ", suspended=" + suspended +
-                '}';
-    }
-
-    @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Market market = (Market) o;
-        return displayed == market.displayed && suspended == market.suspended && Objects.equals(eventId, market.eventId) && Objects.equals(marketId, market.marketId) && Objects.equals(name, market.name);
+        return displayed == market.displayed && suspended == market.suspended && Objects
+            .equals(eventId, market.eventId) && Objects.equals(marketId, market.marketId) && Objects
+            .equals(name, market.name) && Objects.equals(outcomes, market.outcomes);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(eventId, marketId, name, displayed, suspended);
+        return Objects.hash(eventId, marketId, name, displayed, suspended, outcomes);
     }
 }

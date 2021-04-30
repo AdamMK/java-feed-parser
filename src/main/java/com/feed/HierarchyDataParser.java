@@ -77,7 +77,7 @@ public class HierarchyDataParser {
             boolean displayed = "1".equals(ar.get(8));
             boolean suspended = "1".equals(ar.get(9));
 
-            return new Market(msgId, operation, timestamp, eventId, marketId, name, displayed, suspended);
+            return new Market(msgId, operation, timestamp, eventId, marketId, name, displayed, suspended, new ArrayList<>());
         } catch (Exception e) {
             throw new ParsingFailedException("Market could not be parsed");
         }

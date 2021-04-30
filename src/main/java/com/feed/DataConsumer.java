@@ -74,6 +74,9 @@ public class DataConsumer implements ApplicationListener<ApplicationReadyEvent> 
                 else if (parsedValue instanceof Outcome) {
                     Outcome outcome = (Outcome) parsedValue;
                     outcomeDataRepository.save(outcome);
+                    Market marketUpdate = marketDataRepository.findByMarketId(outcome.getMarketId());
+                    marketUpdate.outcomes.add(outcome);
+                    marketDataRepository.save(marketUpdate);
                 }
                 //System.out.println(jsonObjectMapper.writeValueAsString(parsedValue));
             } catch (Exception e) {
