@@ -4,6 +4,8 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.time.Instant;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 @Document(collection = "event")
@@ -17,6 +19,9 @@ public class Event extends HierarchyData{
     private Instant startTime;
     private boolean displayed;
     private boolean suspended;
+    List<Market> markets;
+
+
 
     public Event(
         int msgId,
@@ -28,7 +33,8 @@ public class Event extends HierarchyData{
         String name,
         Instant startTime,
         boolean displayed,
-        boolean suspended
+        boolean suspended,
+        List<Market> markets
     ) {
         super(msgId, operation, timestamp);
         this.eventId = eventId;
@@ -38,6 +44,7 @@ public class Event extends HierarchyData{
         this.startTime = startTime;
         this.displayed = displayed;
         this.suspended = suspended;
+        this.markets = markets;
     }
 
     public String getEventId() {
@@ -96,29 +103,42 @@ public class Event extends HierarchyData{
         this.suspended = suspended;
     }
 
-    @Override
-    public String toString() {
-        return "Event{" +
-                "eventId='" + eventId + '\'' +
-                ", category='" + category + '\'' +
-                ", subCategory='" + subCategory + '\'' +
-                ", name='" + name + '\'' +
-                ", startTime=" + startTime +
-                ", displayed=" + displayed +
-                ", suspended=" + suspended +
-                '}';
+    public List<Market> getMarkets() {
+        return markets;
     }
+
+    public void setMarkets(List<Market> markets) {
+        this.markets = markets;
+    }
+
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Event event = (Event) o;
-        return displayed == event.displayed && suspended == event.suspended && Objects.equals(eventId, event.eventId) && Objects.equals(category, event.category) && Objects.equals(subCategory, event.subCategory) && Objects.equals(name, event.name) && Objects.equals(startTime, event.startTime);
+        return displayed == event.displayed && suspended == event.suspended && Objects
+            .equals(eventId, event.eventId) && Objects.equals(category, event.category) && Objects
+            .equals(subCategory, event.subCategory) && Objects.equals(name, event.name) && Objects
+            .equals(startTime, event.startTime) && Objects.equals(markets, event.markets);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(eventId, category, subCategory, name, startTime, displayed, suspended);
+        return Objects.hash(eventId, category, subCategory, name, startTime, displayed, suspended, markets);
+    }
+
+    @Override
+    public String toString() {
+        return "Event{" +
+            "eventId='" + eventId + '\'' +
+            ", category='" + category + '\'' +
+            ", subCategory='" + subCategory + '\'' +
+            ", name='" + name + '\'' +
+            ", startTime=" + startTime +
+            ", displayed=" + displayed +
+            ", suspended=" + suspended +
+            ", markets=" + markets +
+            '}';
     }
 }

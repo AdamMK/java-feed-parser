@@ -3,6 +3,7 @@ package com.feed;
 import org.springframework.stereotype.Component;
 
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -57,7 +58,8 @@ public class HierarchyDataParser {
                 name,
                 startTime,
                 displayed,
-                suspended
+                suspended,
+                new ArrayList<>()
             );
         } catch (Exception e) {
             throw new ParsingFailedException("Message could not be parsed " + e);

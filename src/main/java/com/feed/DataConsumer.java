@@ -60,20 +60,27 @@ public class DataConsumer implements ApplicationListener<ApplicationReadyEvent> 
             //assumption on how app would behave on partial data corruption
             try {
                 HierarchyData parsedValue = parser.parse(line);
-                if (parsedValue instanceof Event)
-                    eventDataRepository.save((Event) parsedValue);
-                else if (parsedValue instanceof Market)
-                    marketDataRepository.save((Market) parsedValue);
-                else if (parsedValue instanceof Outcome)
-                    outcomeDataRepository.save((Outcome) parsedValue);
+                if (parsedValue instanceof Event) {
+                    Event event = (Event) parsedValue;
+                    eventDataRepository.save(event);
+                }
+                else if (parsedValue instanceof Market) {
+                    Market market = (Market) parsedValue;
+                    marketDataRepository.save(market);
+                    Event eventUpdate = eventDataRepository.findByEventId(market.getEventId());
+                    eventUpdate.markets.add(market);
+                    eventDataRepository.save(eventUpdate);
+                }
+                else if (parsedValue instanceof Outcome) {
+                    Outcome outcome = (Outcome) parsedValue;
+                    outcomeDataRepository.save(outcome);
+                }
                 //System.out.println(jsonObjectMapper.writeValueAsString(parsedValue));
             } catch (Exception e) {
                 LOGGER.info("Message could not be parsed");
             }
-
         }
 
         return content.toString();
     }
-
 }

@@ -2,6 +2,8 @@ package com.feed;
 
 import org.junit.jupiter.api.Test;
 import java.time.Instant;
+import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 class HierarchyDataParserTest {
@@ -21,7 +23,8 @@ class HierarchyDataParserTest {
                 "Watford vs Southampton",
                 Instant.ofEpochSecond(1616768199536L),
                 false,
-                true
+                true,
+                List.of()
                 ), dataParser.parse(exampleLine));
     }
 
