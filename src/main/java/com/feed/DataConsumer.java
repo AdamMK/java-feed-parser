@@ -70,13 +70,22 @@ public class DataConsumer implements ApplicationListener<ApplicationReadyEvent> 
                     Event eventUpdate = eventDataRepository.findByEventId(market.getEventId());
                     eventUpdate.markets.add(market);
                     eventDataRepository.save(eventUpdate);
+                    if (market.getOperation().equals("update")){
+                        System.out.println("Updated - " + market);
+                    }
                 }
+//                update to check
+//                hierarchy bits in the data
+//                json?
                 else if (parsedValue instanceof Outcome) {
                     Outcome outcome = (Outcome) parsedValue;
                     outcomeDataRepository.save(outcome);
                     Market marketUpdate = marketDataRepository.findByMarketId(outcome.getMarketId());
                     marketUpdate.outcomes.add(outcome);
                     marketDataRepository.save(marketUpdate);
+                    Event eventUpdate = eventDataRepository.findByEventId(marketUpdate.getEventId());
+                    eventUpdate.markets.add(marketUpdate);
+                    eventDataRepository.save(eventUpdate);
                 }
                 //System.out.println(jsonObjectMapper.writeValueAsString(parsedValue));
             } catch (Exception e) {
